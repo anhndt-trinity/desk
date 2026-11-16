@@ -1,0 +1,365 @@
+:root {
+  color-scheme: dark;
+  --ink: #14181f;
+  --ink-2: #1c2330;
+  --ink-3: #273142;
+  --paper: #f4f1ea;
+  --muted: #a8b0bf;
+  --lamp: #e3a008;
+  --danger: #e15a4a;
+  --ok: #3d9a78;
+  --line: #334155;
+  --radius: 14px;
+  --shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+  font-family: 'IBM Plex Sans', system-ui, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color: var(--paper);
+  background: var(--ink);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  background:
+    radial-gradient(circle at top left, rgba(227, 160, 8, 0.12), transparent 35%),
+    radial-gradient(circle at top right, rgba(61, 154, 120, 0.08), transparent 30%),
+    var(--ink);
+}
+
+a {
+  color: var(--lamp);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+.app-shell {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 3rem;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.75rem;
+}
+
+.brand {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.brand strong {
+  font-family: Fraunces, Georgia, serif;
+  font-size: 1.5rem;
+  letter-spacing: 0.02em;
+}
+
+.brand span {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.nav {
+  display: flex;
+  gap: 0.85rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.nav a {
+  color: var(--paper);
+  padding: 0.35rem 0.55rem;
+  border-radius: 999px;
+}
+
+.nav a:hover {
+  background: var(--ink-3);
+  text-decoration: none;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: end;
+  margin-bottom: 1.25rem;
+}
+
+.page-header h1 {
+  font-family: Fraunces, Georgia, serif;
+  font-size: 2rem;
+  margin: 0 0 0.25rem;
+}
+
+.page-header p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.toolbar {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.25rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  min-width: 0;
+}
+
+.field label {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.field input,
+.field select {
+  background: var(--ink-2);
+  border: 1px solid var(--line);
+  color: var(--paper);
+  border-radius: 10px;
+  padding: 0.65rem 0.8rem;
+  min-width: 220px;
+}
+
+.field input:focus,
+.field select:focus {
+  outline: 2px solid rgba(227, 160, 8, 0.45);
+  border-color: var(--lamp);
+}
+
+.field-error {
+  color: var(--danger);
+  font-size: 0.85rem;
+}
+
+.room-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1rem;
+}
+
+.room-card {
+  background: linear-gradient(180deg, var(--ink-2), #171d28);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1.1rem;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-height: 180px;
+}
+
+.room-card h2 {
+  font-family: Fraunces, Georgia, serif;
+  margin: 0;
+  font-size: 1.35rem;
+}
+
+.room-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.room-card .price {
+  color: var(--lamp);
+  font-weight: 600;
+}
+
+.room-card .todo {
+  color: var(--danger);
+  font-size: 0.9rem;
+  border: 1px dashed rgba(225, 90, 74, 0.5);
+  border-radius: 10px;
+  padding: 0.75rem;
+  background: rgba(225, 90, 74, 0.08);
+}
+
+.btn {
+  appearance: none;
+  border: none;
+  border-radius: 999px;
+  padding: 0.65rem 1rem;
+  background: var(--lamp);
+  color: #1a1405;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn:hover {
+  filter: brightness(1.05);
+}
+
+.btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--paper);
+  border: 1px solid var(--line);
+}
+
+.panel {
+  background: var(--ink-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  box-shadow: var(--shadow);
+}
+
+.panel h2 {
+  font-family: Fraunces, Georgia, serif;
+  margin-top: 0;
+}
+
+.state-box {
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  border: 1px solid var(--line);
+  background: var(--ink-2);
+  text-align: center;
+}
+
+.state-box.loading {
+  color: var(--muted);
+}
+
+.state-box.error {
+  border-color: rgba(225, 90, 74, 0.45);
+  background: rgba(225, 90, 74, 0.08);
+}
+
+.state-box.empty {
+  color: var(--muted);
+}
+
+.detail-layout {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 1.25rem;
+}
+
+@media (max-width: 860px) {
+  .detail-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.amenity-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 0;
+  margin: 1rem 0 0;
+  list-style: none;
+}
+
+.amenity-list li {
+  background: var(--ink-3);
+  border-radius: 999px;
+  padding: 0.3rem 0.7rem;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.form-grid {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.form-actions {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 0.5rem;
+}
+
+.banner {
+  border-radius: 10px;
+  padding: 0.75rem 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.banner.error {
+  background: rgba(225, 90, 74, 0.12);
+  border: 1px solid rgba(225, 90, 74, 0.4);
+  color: #ffc5be;
+}
+
+.banner.ok {
+  background: rgba(61, 154, 120, 0.12);
+  border: 1px solid rgba(61, 154, 120, 0.4);
+  color: #b6ebd6;
+}
+
+.banner.info {
+  background: rgba(227, 160, 8, 0.12);
+  border: 1px solid rgba(227, 160, 8, 0.35);
+  color: #f3d48a;
+}
+
+.booking-list {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.booking-row {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 0.8fr 0.8fr;
+  gap: 0.75rem;
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--ink-2);
+}
+
+@media (max-width: 720px) {
+  .booking-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.mono {
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 0.9rem;
+}
