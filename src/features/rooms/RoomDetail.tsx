@@ -32,9 +32,7 @@ export function RoomDetail() {
         if (!roomId) throw new Error('missing')
         const room = await getRoom(roomId)
         if (!cancelled) {
-          // LAB 4 checkpoint: remove the next throw and set success with `room`.
-          void room
-          throw new Error('Lab 4: set success state with the loaded room.')
+          setState({status: 'success', room: room});
         }
       } catch (error) {
         if (!cancelled) {
