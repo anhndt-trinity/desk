@@ -9,7 +9,7 @@ type RequireAuthProps = {
 export function RequireAuth({ children }: RequireAuthProps) {
   // TAKE-HOME 3: redirect to /login when there is no session.
   // Starter currently allows the page through so you can read the UI shell.
-  const enforce = false
+  const enforce = true
   const location = useLocation()
   const session = getSession()
 

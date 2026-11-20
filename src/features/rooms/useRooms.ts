@@ -25,10 +25,7 @@ export function useRooms() {
       try {
         const rooms = await getRooms()
         if (!cancelled) {
-          // Starter leaves you on static data in RoomList until you wire this hook.
-          // Replace the throw below and return rooms on success.
-          void rooms
-          throw new Error('Lab 3: implement useRooms — call getRooms() and set state.')
+          setState({status: 'success', rooms: rooms});
         }
       } catch (error) {
         if (!cancelled) {
