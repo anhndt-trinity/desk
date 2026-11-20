@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from 'react'
-import { createBooking } from '../../lib/api'
+import { ApiError, createBooking } from '../../lib/api'
 import type { Room } from '../../types'
-import { validateBooking, type BookingFormValues } from './validateBooking'
+import { validateBooking, type BookingFormValues } from './validateBooking';
 
 type BookingFormProps = {
   room: Room
@@ -31,9 +31,9 @@ export function BookingForm({ room }: BookingFormProps) {
     setSubmitError(null)
     setSubmitInfo(null)
 
-    const errors = validateBooking(values, room.capacity)
-    setFieldErrors(errors)
-    if (Object.keys(errors).length > 0) return
+    // const errors = validateBooking(values, room.capacity)
+    // setFieldErrors(errors)
+    // if (Object.keys(errors).length > 0) return
 
     setSubmitting(true)
     try {
@@ -47,6 +47,8 @@ export function BookingForm({ room }: BookingFormProps) {
       setValues(initialValues)
     } catch (error) {
       setSubmitError(error instanceof Error ? error.message : 'Booking failed.')
+      if (error instanceof ApiError && error.status === 400 && error.fields)
+        setFieldErrors(error.fields);
     } finally {
       setSubmitting(false)
     }
@@ -55,10 +57,10 @@ export function BookingForm({ room }: BookingFormProps) {
   return (
     <form className="panel" onSubmit={handleSubmit} noValidate>
       <h2>Book {room.name}</h2>
-      <p className="muted">
+      {/* <p className="muted">
         Lab 5 ends with an honest <span className="mono">401</span> until you sign in
         tonight.
-      </p>
+      </p> */}
 
       {submitError ? <div className="banner error">{submitError}</div> : null}
       {submitInfo ? <div className="banner ok">{submitInfo}</div> : null}

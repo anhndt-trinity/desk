@@ -18,11 +18,9 @@ export function LoginPage() {
 
     try {
       // TAKE-HOME 1: call login(email, password), setSession(session), then navigate.
-      void login
-      void setSession
-      void navigate
-      void params
-      throw new Error('Take-home: implement login and store the session.')
+      const session = await login(email, password);
+      setSession(session);
+      navigate(params.get('from') || '/bookings')
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Sign-in failed.')
     } finally {
