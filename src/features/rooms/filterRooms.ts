@@ -6,6 +6,12 @@ export function filterRooms(rooms: Room[], query: string): Room[] {
 
   // LAB 2: return rooms whose name or description includes `q` (case-insensitive).
   // Hint: room.name.toLowerCase().includes(q)
-  void q
   return rooms
+    .filter(
+      r => {
+        const name = r.name.toLowerCase();
+        const description = r.description.toLowerCase();
+
+        return name.includes(q) || description.includes(q);
+      });
 }
