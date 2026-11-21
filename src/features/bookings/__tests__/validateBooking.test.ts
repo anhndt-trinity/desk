@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { validateBooking } from '../validateBooking'
 
 function tomorrow(): string {
@@ -8,6 +8,22 @@ function tomorrow(): string {
 }
 
 describe('validateBooking', () => {
+  afterEach(() => {
+    vi.useRealTimers()
+  })
+
+  it('rejects yesterday and accepts today in local time', () => {
+    vi.useFakeTimers()
+    vi.setSystemTime(new Date(2026, 10, 17, 0, 30))
+
+    expect(
+      validateBooking({ date: '2026-11-16', hours: '2', guests: '2' }, 8).date,
+    ).toBeTruthy()
+    expect(
+      validateBooking({ date: '2026-11-17', hours: '2', guests: '2' }, 8),
+    ).toEqual({})
+  })
+
   it('accepts a valid booking', () => {
     expect(
       validateBooking({ date: tomorrow(), hours: '2', guests: '3' }, 8),
