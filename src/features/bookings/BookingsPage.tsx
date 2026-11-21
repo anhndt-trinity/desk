@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { EmptyState } from '../../components/EmptyState'
 import { ErrorState } from '../../components/ErrorState'
 import { LoadingState } from '../../components/LoadingState'
-import { getBookings } from '../../lib/api'
-import { getUser } from '../../lib/session'
+import { ApiError, getBookings } from '../../lib/api'
+import { clearSession, getUser } from '../../lib/session'
 import type { Booking } from '../../types'
 
 type BookingsState =
@@ -14,6 +14,8 @@ type BookingsState =
 
 export function BookingsPage() {
   const user = getUser()
+  const navigate = useNavigate()
+  const [attempt, setAttempt] = useState(0)
   const [state, setState] = useState<BookingsState>({ status: 'loading' })
 
   useEffect(() => {
@@ -22,14 +24,17 @@ export function BookingsPage() {
     async function load() {
       setState({ status: 'loading' })
       try {
-        // TAKE-HOME 4: call getBookings() and set success. Guests see theirs; staff see all.
         const bookings = await getBookings()
         if (!cancelled) {
-          void bookings
-          throw new Error('Take-home: load bookings with getBookings().')
+          setState({ status: 'success', bookings })
         }
       } catch (error) {
         if (!cancelled) {
+          if (error instanceof ApiError && error.status === 401) {
+            clearSession()
+            navigate(`/login?from=${encodeURIComponent('/bookings')}`, { replace: true })
+            return
+          }
           setState({
             status: 'error',
             message: error instanceof Error ? error.message : 'Failed to load bookings.',
@@ -42,7 +47,7 @@ export function BookingsPage() {
     return () => {
       cancelled = true
     }
-  }, [])
+  }, [attempt, navigate])
 
   return (
     <section>
@@ -63,7 +68,9 @@ export function BookingsPage() {
       </div>
 
       {state.status === 'loading' ? <LoadingState label="Loading bookings…" /> : null}
-      {state.status === 'error' ? <ErrorState message={state.message} /> : null}
+      {state.status === 'error' ? (
+        <ErrorState message={state.message} onRetry={() => setAttempt((value) => value + 1)} />
+      ) : null}
       {state.status === 'success' && state.bookings.length === 0 ? (
         <EmptyState message="No bookings yet." />
       ) : null}

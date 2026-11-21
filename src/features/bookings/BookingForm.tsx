@@ -1,5 +1,7 @@
 import { useState, type FormEvent } from 'react'
-import { createBooking } from '../../lib/api'
+import { useNavigate } from 'react-router-dom'
+import { ApiError, createBooking } from '../../lib/api'
+import { clearSession } from '../../lib/session'
 import type { Room } from '../../types'
 import { validateBooking, type BookingFormValues } from './validateBooking'
 
@@ -15,7 +17,7 @@ const initialValues: BookingFormValues = {
 
 export function BookingForm({ room }: BookingFormProps) {
   // LAB 5: keep values in state, validate on submit, then call createBooking.
-  // A valid submit without a token should show the API's 401 message — that is expected.
+  const navigate = useNavigate()
   const [values, setValues] = useState<BookingFormValues>(initialValues)
   const [fieldErrors, setFieldErrors] = useState<ReturnType<typeof validateBooking>>({})
   const [submitError, setSubmitError] = useState<string | null>(null)
@@ -46,6 +48,18 @@ export function BookingForm({ room }: BookingFormProps) {
       setSubmitInfo('Booking created.')
       setValues(initialValues)
     } catch (error) {
+      if (error instanceof ApiError && error.status === 401) {
+        clearSession()
+        navigate(`/login?from=${encodeURIComponent(`/rooms/${room.id}`)}`)
+        return
+      }
+      if (error instanceof ApiError && error.status === 400 && error.fields) {
+        setFieldErrors({
+          date: error.fields.date,
+          hours: error.fields.hours,
+          guests: error.fields.guests,
+        })
+      }
       setSubmitError(error instanceof Error ? error.message : 'Booking failed.')
     } finally {
       setSubmitting(false)
@@ -56,8 +70,7 @@ export function BookingForm({ room }: BookingFormProps) {
     <form className="panel" onSubmit={handleSubmit} noValidate>
       <h2>Book {room.name}</h2>
       <p className="muted">
-        Lab 5 ends with an honest <span className="mono">401</span> until you sign in
-        tonight.
+        Choose a date, hours, and number of guests. Sign in to confirm your booking.
       </p>
 
       {submitError ? <div className="banner error">{submitError}</div> : null}

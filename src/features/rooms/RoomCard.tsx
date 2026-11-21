@@ -13,8 +13,11 @@ export function RoomCard({ room }: RoomCardProps) {
         Done when each card shows those three facts (no TODO box left).
       */}
       <div className="todo">
-        Lab 1: finish <span className="mono">RoomCard</span> for{' '}
         <span className="mono">{room.id}</span>
+        <div>name: {room.name}</div>
+        <div>capacity: {room.capacity}</div>
+        <div>price: ${room.pricePerHour}/hr</div>
+        <div>description: {room.description}</div>
       </div>
       <div className="room-meta">
         <Link to={`/rooms/${room.id}`}>View room</Link>
