@@ -9,13 +9,17 @@ type RequireAuthProps = {
 export function RequireAuth({ children }: RequireAuthProps) {
   // TAKE-HOME 3: redirect to /login when there is no session.
   // Starter currently allows the page through so you can read the UI shell.
-  const enforce = false
+  const enforce = true 
   const location = useLocation()
   const session = getSession()
 
-  if (enforce && !session) {
-    return <Navigate to="/login" replace state={{ from: location.pathname }} />
-  }
-
+if (enforce && !session) {
+  return (
+    <Navigate
+      to={`/login?from=${encodeURIComponent(location.pathname)}`}
+      replace
+    />
+  )
+}
   return children
 }

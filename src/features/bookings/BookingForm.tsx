@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react'
-import { createBooking } from '../../lib/api'
+import { ApiError, createBooking } from '../../lib/api'
 import type { Room } from '../../types'
 import { validateBooking, type BookingFormValues } from './validateBooking'
 
@@ -47,6 +47,11 @@ export function BookingForm({ room }: BookingFormProps) {
       setValues(initialValues)
     } catch (error) {
       setSubmitError(error instanceof Error ? error.message : 'Booking failed.')
+
+      if (error instanceof ApiError && error.status === 400 && error.fields) {
+        setFieldErrors(error.fields)
+
+      }
     } finally {
       setSubmitting(false)
     }

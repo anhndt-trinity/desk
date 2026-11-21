@@ -1,8 +1,7 @@
 import { useState, type FormEvent } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { login } from '../../lib/api'
-import { setSession } from '../../lib/session'
-
+import { useAuth } from './AuthContext'
 export function LoginPage() {
   const navigate = useNavigate()
   const [params] = useSearchParams()
@@ -10,19 +9,17 @@ export function LoginPage() {
   const [password, setPassword] = useState('guest123')
   const [error, setError] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
+  const { signIn } = useAuth()
+
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     setError(null)
     setSubmitting(true)
-
     try {
-      // TAKE-HOME 1: call login(email, password), setSession(session), then navigate.
-      void login
-      void setSession
-      void navigate
-      void params
-      throw new Error('Take-home: implement login and store the session.')
+     const session = await login(email, password)
+signIn(session)
+navigate(params.get('from') || '/bookings')
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Sign-in failed.')
     } finally {

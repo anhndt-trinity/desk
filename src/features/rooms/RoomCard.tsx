@@ -8,17 +8,12 @@ type RoomCardProps = {
 export function RoomCard({ room }: RoomCardProps) {
   return (
     <article className="room-card">
-      {/*
-        LAB 1: Render the room name, capacity, and hourly price from the `room` prop.
-        Done when each card shows those three facts (no TODO box left).
-      */}
-      <div className="todo">
-        Lab 1: finish <span className="mono">RoomCard</span> for{' '}
-        <span className="mono">{room.id}</span>
-      </div>
+      <h2>{room.name}</h2>
       <div className="room-meta">
-        <Link to={`/rooms/${room.id}`}>View room</Link>
+        <span>Hold: {room.capacity}</span>
+        <span className="price">${room.pricePerHour}/hr</span>
       </div>
+      <Link to={`/rooms/${room.id}`}>View room</Link>
     </article>
   )
 }

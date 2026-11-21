@@ -1,5 +1,5 @@
 import type { Booking, BookingInput, Room, Session } from '../types'
-import { getToken } from './session'
+import { clearSession, getToken } from './session'
 
 export class ApiError extends Error {
   status: number
@@ -28,9 +28,17 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
   const response = await fetch(path, { ...init, headers })
   const text = await response.text()
   const data = text ? (JSON.parse(text) as unknown) : null
-
   if (!response.ok) {
-    const body = data as { message?: string; fields?: Record<string, string> } | null
+    if (response.status === 401 && path !== '/api/login') {
+      clearSession()
+      window.location.href = '/login'
+    }
+
+    const body = data as {
+      message?: string
+      fields?: Record<string, string>
+    } | null
+
     throw new ApiError(
       response.status,
       body?.message ?? `Request failed (${response.status})`,

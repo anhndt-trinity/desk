@@ -19,16 +19,13 @@ export function useRooms() {
     let cancelled = false
 
     async function load() {
+      setState({status : 'loading'});
       // LAB 3: set loading, call getRooms(), then set success or error.
       // Keep the cancelled check so a slow response cannot overwrite a newer one.
-      setState({ status: 'loading' })
       try {
         const rooms = await getRooms()
         if (!cancelled) {
-          // Starter leaves you on static data in RoomList until you wire this hook.
-          // Replace the throw below and return rooms on success.
-          void rooms
-          throw new Error('Lab 3: implement useRooms — call getRooms() and set state.')
+          setState({ status: 'success', rooms })
         }
       } catch (error) {
         if (!cancelled) {
