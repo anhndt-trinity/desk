@@ -7,7 +7,7 @@ import { RoomCard } from './RoomCard'
 import { filterRooms } from './filterRooms'
 import { useRooms } from './useRooms'
 
-const USE_API = false
+const USE_API = true
 
 export function RoomList() {
   // LAB 2: wire this search box with useState and pass the value into filterRooms.
@@ -21,7 +21,7 @@ export function RoomList() {
     : ROOMS
 
   const rooms = useMemo(() => filterRooms(sourceRooms, query), [sourceRooms, query])
-
+  
   return (
     <section>
       <div className="page-header">

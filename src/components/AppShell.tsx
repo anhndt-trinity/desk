@@ -1,8 +1,8 @@
 import { Link, Outlet } from 'react-router-dom'
-import { getUser } from '../lib/session'
+import { useAuth } from '../features/auth/AuthContext'
 
 export function AppShell() {
-  const user = getUser()
+  const { user } = useAuth()
 
   return (
     <div className="app-shell">

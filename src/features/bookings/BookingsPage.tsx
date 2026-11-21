@@ -22,11 +22,10 @@ export function BookingsPage() {
     async function load() {
       setState({ status: 'loading' })
       try {
-        // TAKE-HOME 4: call getBookings() and set success. Guests see theirs; staff see all.
         const bookings = await getBookings()
+
         if (!cancelled) {
-          void bookings
-          throw new Error('Take-home: load bookings with getBookings().')
+          setState({ status: 'success', bookings })
         }
       } catch (error) {
         if (!cancelled) {
