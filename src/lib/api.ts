@@ -1,5 +1,6 @@
+import { router } from '../app/routes'
 import type { Booking, BookingInput, Room, Session } from '../types'
-import { getToken } from './session'
+import { clearSession, getToken } from './session'
 
 export class ApiError extends Error {
   status: number
@@ -28,6 +29,15 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
   const response = await fetch(path, { ...init, headers })
   const text = await response.text()
   const data = text ? (JSON.parse(text) as unknown) : null
+
+  if (response.status === 401) {
+    clearSession()
+
+    if (path !== '/api/login') {
+      const from = `${window.location.pathname}${window.location.search}`
+      void router.navigate(`/login?from=${encodeURIComponent(from)}`, { replace: true })
+    }
+  }
 
   if (!response.ok) {
     const body = data as { message?: string; fields?: Record<string, string> } | null
