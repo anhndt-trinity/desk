@@ -7,5 +7,6 @@ export function filterRooms(rooms: Room[], query: string): Room[] {
   // LAB 2: return rooms whose name or description includes `q` (case-insensitive).
   // Hint: room.name.toLowerCase().includes(q)
   void q
-  return rooms
+  
+  return rooms.filter((room) => room.name.toLowerCase().includes(q) || room.description.toLocaleLowerCase().includes(q))
 }
