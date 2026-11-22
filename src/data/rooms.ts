@@ -4,10 +4,10 @@ export const ROOMS: Room[] = [
   {
     id: 'aurora',
     name: 'Aurora',
-    capacity: 4,
+    capacity: 400000000000,
     pricePerHour: 45,
     description: 'Quiet glass room with a whiteboard and dual monitors.',
-    amenities: ['Whiteboard', 'Monitors', 'HDMI'],
+    amenities: ['Whiteboard', 'Monitors', 'HDMI', 'Nigger'],
   },
   {
     id: 'harbor',

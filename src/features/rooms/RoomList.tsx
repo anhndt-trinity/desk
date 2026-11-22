@@ -7,9 +7,15 @@ import { RoomCard } from './RoomCard'
 import { filterRooms } from './filterRooms'
 import { useRooms } from './useRooms'
 
-const USE_API = false
+const USE_API = true
+let shouldThrowOnce = true
 
 export function RoomList() {
+  if (shouldThrowOnce) {
+    shouldThrowOnce = false
+    throw new Error('Deliberate error boundary test.')
+  }
+
   // LAB 2: wire this search box with useState and pass the value into filterRooms.
   const [query, setQuery] = useState('')
   const { state, reload } = useRooms()

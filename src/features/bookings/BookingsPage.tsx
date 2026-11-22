@@ -4,7 +4,7 @@ import { EmptyState } from '../../components/EmptyState'
 import { ErrorState } from '../../components/ErrorState'
 import { LoadingState } from '../../components/LoadingState'
 import { getBookings } from '../../lib/api'
-import { getUser } from '../../lib/session'
+import { useAuth } from '../auth/AuthContext'
 import type { Booking } from '../../types'
 
 type BookingsState =
@@ -13,7 +13,7 @@ type BookingsState =
   | { status: 'success'; bookings: Booking[] }
 
 export function BookingsPage() {
-  const user = getUser()
+  const { user } = useAuth()
   const [state, setState] = useState<BookingsState>({ status: 'loading' })
 
   useEffect(() => {
@@ -25,8 +25,7 @@ export function BookingsPage() {
         // TAKE-HOME 4: call getBookings() and set success. Guests see theirs; staff see all.
         const bookings = await getBookings()
         if (!cancelled) {
-          void bookings
-          throw new Error('Take-home: load bookings with getBookings().')
+          setState({ status: 'success', bookings })
         }
       } catch (error) {
         if (!cancelled) {
