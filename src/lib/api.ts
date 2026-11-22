@@ -1,5 +1,5 @@
 import type { Booking, BookingInput, Room, Session } from '../types'
-import { getToken } from './session'
+import { clearSession, getToken } from './session'
 
 export class ApiError extends Error {
   status: number
@@ -31,6 +31,9 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
 
   if (!response.ok) {
     const body = data as { message?: string; fields?: Record<string, string> } | null
+    if (response.status === 401) {
+      clearSession()
+    }
     throw new ApiError(
       response.status,
       body?.message ?? `Request failed (${response.status})`,

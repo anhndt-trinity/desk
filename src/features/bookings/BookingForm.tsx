@@ -1,6 +1,8 @@
 import { useState, type FormEvent } from 'react'
-import { createBooking } from '../../lib/api'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { ApiError, createBooking } from '../../lib/api'
 import type { Room } from '../../types'
+import { useAuth } from '../auth/AuthContext'
 import { validateBooking, type BookingFormValues } from './validateBooking'
 
 type BookingFormProps = {
@@ -14,13 +16,14 @@ const initialValues: BookingFormValues = {
 }
 
 export function BookingForm({ room }: BookingFormProps) {
-  // LAB 5: keep values in state, validate on submit, then call createBooking.
-  // A valid submit without a token should show the API's 401 message — that is expected.
   const [values, setValues] = useState<BookingFormValues>(initialValues)
   const [fieldErrors, setFieldErrors] = useState<ReturnType<typeof validateBooking>>({})
   const [submitError, setSubmitError] = useState<string | null>(null)
   const [submitInfo, setSubmitInfo] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
+  const navigate = useNavigate()
+  const location = useLocation()
+  const { signOut } = useAuth()
 
   function updateField<K extends keyof BookingFormValues>(key: K, value: BookingFormValues[K]) {
     setValues((current) => ({ ...current, [key]: value }))
@@ -46,6 +49,20 @@ export function BookingForm({ room }: BookingFormProps) {
       setSubmitInfo('Booking created.')
       setValues(initialValues)
     } catch (error) {
+      if (error instanceof ApiError && error.status === 400 && error.fields) {
+        const apiFieldErrors: ReturnType<typeof validateBooking> = {}
+        for (const key of ['date', 'hours', 'guests'] as const) {
+          if (error.fields[key]) apiFieldErrors[key] = error.fields[key]
+        }
+        setFieldErrors(apiFieldErrors)
+        setSubmitError(error.message)
+        return
+      }
+      if (error instanceof ApiError && error.status === 401) {
+        signOut()
+        navigate(`/login?from=${encodeURIComponent(location.pathname)}`, { replace: true })
+        return
+      }
       setSubmitError(error instanceof Error ? error.message : 'Booking failed.')
     } finally {
       setSubmitting(false)

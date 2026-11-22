@@ -3,12 +3,15 @@ import { createRoot } from 'react-dom/client'
 import { RouterProvider } from 'react-router-dom'
 import { ErrorBoundary } from './components/ErrorBoundary'
 import { router } from './app/routes'
+import { AuthProvider } from './features/auth/AuthContext'
 import './styles/index.css'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ErrorBoundary>
-      <RouterProvider router={router} />
+      <AuthProvider>
+        <RouterProvider router={router} />
+      </AuthProvider>
     </ErrorBoundary>
   </StrictMode>,
 )
