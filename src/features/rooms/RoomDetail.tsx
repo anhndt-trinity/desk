@@ -12,7 +12,6 @@ type DetailState =
   | { status: 'success'; room: Room }
 
 export function RoomDetail() {
-  // LAB 4: read roomId from useParams and load that room with getRoom(roomId).
   const params = useParams()
   const roomId = params.roomId
   const [state, setState] = useState<DetailState>({ status: 'loading' })
@@ -28,13 +27,9 @@ export function RoomDetail() {
 
       setState({ status: 'loading' })
       try {
-        // Starter intentionally fails until Lab 4 is done.
-        if (!roomId) throw new Error('missing')
         const room = await getRoom(roomId)
         if (!cancelled) {
-          // LAB 4 checkpoint: remove the next throw and set success with `room`.
-          void room
-          throw new Error('Lab 4: set success state with the loaded room.')
+          setState({ status: 'success', room })
         }
       } catch (error) {
         if (!cancelled) {
