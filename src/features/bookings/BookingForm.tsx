@@ -1,8 +1,8 @@
 import { useState, type FormEvent } from 'react'
-import { createBooking } from '../../lib/api'
+import { ApiError, createBooking } from '../../lib/api'
 import type { Room } from '../../types'
 import { validateBooking, type BookingFormValues } from './validateBooking'
-
+import { useLocation, useNavigate } from 'react-router-dom'
 type BookingFormProps = {
   room: Room
 }
@@ -16,6 +16,9 @@ const initialValues: BookingFormValues = {
 export function BookingForm({ room }: BookingFormProps) {
   // LAB 5: keep values in state, validate on submit, then call createBooking.
   // A valid submit without a token should show the API's 401 message — that is expected.
+  const navigate = useNavigate()
+  const location = useLocation()
+
   const [values, setValues] = useState<BookingFormValues>(initialValues)
   const [fieldErrors, setFieldErrors] = useState<ReturnType<typeof validateBooking>>({})
   const [submitError, setSubmitError] = useState<string | null>(null)
@@ -46,6 +49,18 @@ export function BookingForm({ room }: BookingFormProps) {
       setSubmitInfo('Booking created.')
       setValues(initialValues)
     } catch (error) {
+      if (error instanceof ApiError && error.status === 401) {
+        const from = encodeURIComponent(location.pathname)
+        navigate(`/login?from=${from}`, { replace: true })
+        return
+      }
+
+      if (error instanceof ApiError && error.status === 400 && error.fields) {
+        setFieldErrors(error.fields)
+        setSubmitError(error.message)
+        return
+      }
+
       setSubmitError(error instanceof Error ? error.message : 'Booking failed.')
     } finally {
       setSubmitting(false)

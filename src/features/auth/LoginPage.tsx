@@ -1,11 +1,12 @@
 import { useState, type FormEvent } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { login } from '../../lib/api'
-import { setSession } from '../../lib/session'
+import { useAuth } from './AuthContext'
 
 export function LoginPage() {
   const navigate = useNavigate()
   const [params] = useSearchParams()
+  const {signIn} = useAuth()
   const [email, setEmail] = useState('guest@desk.dev')
   const [password, setPassword] = useState('guest123')
   const [error, setError] = useState<string | null>(null)
@@ -18,11 +19,13 @@ export function LoginPage() {
 
     try {
       // TAKE-HOME 1: call login(email, password), setSession(session), then navigate.
-      void login
-      void setSession
-      void navigate
-      void params
-      throw new Error('Take-home: implement login and store the session.')
+      const session = await login(email, password)
+      // setSession(session)
+      signIn(session)
+      const redirectTo = params.get('from') || '/bookings'
+      navigate(redirectTo, { replace: true })
+
+      //throw new Error('Take-home: implement login and store the session.')
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Sign-in failed.')
     } finally {
